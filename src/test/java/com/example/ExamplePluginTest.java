@@ -4,6 +4,7 @@ import com.example.E3t4g.e3t4g;
 import com.example.EthanApiPlugin.EthanApiPlugin;
 import com.example.LavaRunecrafter.LavaRunecrafterPlugin;
 import com.example.NightmareHelper.NightmareHelperPlugin;
+import com.example.Nyxem.OneClick.OneClickPlugin;
 import com.example.PrayerFlicker.EthanPrayerFlickerPlugin;
 import com.example.UpkeepPlugin.UpkeepPlugin;
 import com.example.gauntletFlicker.gauntletFlicker;
@@ -20,7 +21,7 @@ public class ExamplePluginTest
 				gauntletFlicker.class,
 				SuperGlassMakerPlugin.class, UpkeepPlugin.class, LavaRunecrafterPlugin.class,
 				NightmareHelperPlugin.class, SwordFish2Tick.class
-				, e3t4g.class);
+				, e3t4g.class, OneClickPlugin.class);
 		RuneLite.main(args);
 	}
 }
