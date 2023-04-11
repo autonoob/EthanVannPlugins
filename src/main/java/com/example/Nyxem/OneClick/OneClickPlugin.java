@@ -1,8 +1,6 @@
 package com.example.Nyxem.OneClick;
 
 import com.example.EthanApiPlugin.EthanApiPlugin;
-import com.example.EthanApiPlugin.Inventory;
-import com.example.InteractionApi.InteractionHelper;
 import com.example.Packets.MousePackets;
 import com.example.Packets.WidgetPackets;
 import com.google.inject.Provides;
@@ -18,10 +16,6 @@ import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.Optional;
-import java.util.function.Consumer;
 
 @Slf4j
 @PluginDescriptor(
