@@ -1,7 +1,8 @@
 package com.example.Nyxem.OneClick;
 
+import com.example.EthanApiPlugin.EthanApiPlugin;
 import com.example.EthanApiPlugin.Inventory;
-import com.example.InteractionApi.InventoryInteraction;
+import com.example.InteractionApi.InteractionHelper;
 import com.example.Packets.MousePackets;
 import com.example.Packets.WidgetPackets;
 import com.google.inject.Provides;
@@ -11,7 +12,7 @@ import net.runelite.api.*;
 import net.runelite.api.events.*;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.events.GameStateChanged;
-import net.runelite.api.widgets.WidgetID;
+import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -19,9 +20,8 @@ import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import org.apache.commons.lang3.StringUtils;
 
-import java.awt.event.MouseEvent;
-import java.util.Arrays;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 @Slf4j
 @PluginDescriptor(
@@ -38,6 +38,9 @@ public class OneClickPlugin extends Plugin
 
 	@Inject
 	private OneClickConfig config;
+
+	private boolean menu1created = false;
+	private boolean menu2created = false;
 
 	@Override
 	protected void startUp() throws Exception {
@@ -77,40 +80,16 @@ public class OneClickPlugin extends Plugin
 			int firstItemID = Integer.parseInt(firstItemParse);
 			int secondItemID = Integer.parseInt(secondItemParse); // thought I needed these for something
 
-
-			Optional<Widget> firstItem = StringUtils.isNumeric(firstItemParse) ?
-					Inventory.search().withId(firstItemID).first() :
-					Inventory.search().matchesWildCardNoCase(firstItemParse).first();
-
-			Optional<Widget> secondItem = StringUtils.isNumeric(secondItemParse) ?
-					Inventory.search().withId(secondItemID).first() :
-					Inventory.search().matchesWildCardNoCase(secondItemParse).first();
-
-			if(firstItem.isEmpty()) {
-				break; // check item exists
-			}
-
-			if(secondItem.isEmpty()) {
-				break; // check item exists
-			}
-
 			log.info("trying menus");
-			MenuEntry[] entries = this.client.getMenuEntries();
-			for (MenuEntry entry : entries) {
-				log.info("menu if 1"); // can probably be better
-				if (entry.getTarget().contains(firstItem.get().getName())) {
-					log.info("menu1");
-					client.createMenuEntry(1)
-							.setOption("One Click")
-							.setTarget(secondItem.get().getName());
-							// .onClick(ItemOnItem()); // future, remove comment & get widgets of use on item1 to item2
-				}
-				log.info("menu if 2");
-				if (entry.getTarget().contains(secondItem.get().getName())) {
-					log.info("menu2");
-					client.createMenuEntry(1).setOption("One Click").setTarget(firstItem.get().getName());
-				}
-			}
+			Widget item1 = EthanApiPlugin.getItem(firstItemID, WidgetInfo.INVENTORY);
+			Widget item2 = EthanApiPlugin.getItem(secondItemID, WidgetInfo.INVENTORY);
+
+			if (client.getLocalPlayer().getAnimation() != -1 || EthanApiPlugin.isMoving())
+				return;
+
+			if (client.getMouseCurrentButton() != 0 )
+				ItemOnItem(item1, item2);
+
 		}
 	}
 
